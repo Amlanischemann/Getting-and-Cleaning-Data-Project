@@ -1,33 +1,23 @@
 # CodeBook
 
-This code book describes the variables in the `tidydata.txt` file, as well as the transformations applied.
+## Source data
+UCI HAR Dataset: Human Activity Recognition Using Smartphones (Samsung Galaxy S). The original signals are accelerometer (in g) and gyroscope (in rad/s). Magnitude features are Euclidean norms.
 
-## Source Data
-
-Original data were taken from:
-  
-  [UCI HAR Dataset](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
+## Processing steps
+1. Merged training and test sets.
+2. Extracted only features with `mean()` or `std()` in their original names (excluded `meanFreq()` and `angle(...)`).
+3. Replaced activity codes with descriptive names.
+4. Cleaned variable names:
+   - Removed `()` and replaced `-` with `_`.
+   - `t` → `Time_`; `f` → `Freq_`
+   - `Acc` → `Accelerometer`; `Gyro` → `Gyroscope`; `Mag` → `Magnitude`; `BodyBody` → `Body`.
+5. Created a second, independent tidy dataset: the **mean** of each measurement for each **subject** and **activity**.
+6. Wrote `tidydata.txt` with `row.name = FALSE`.
 
 ## Variables in `tidydata.txt`
+- `subject` (integer 1–30)
+- `activity` (character): WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING
+- All remaining columns: **averages** of the corresponding Time/Freq Accelerometer/Gyroscope features (units inherited from source: g or rad/s).
 
-Each row represents the **average** of a measurement for one subject and one activity.
-
-Variables include:
-  
-  - subject: ID of the subject (1–30)
-- activity: Activity name (WALKING, LAYING, etc.)
-- TimeBodyAccelerometerMeanX
-- TimeBodyAccelerometerMeanY
-- ...
-- FrequencyBodyGyroscopeSTDZ
-
-(Only mean and std variables were included.)
-
-## Transformations
-
-- Merged train and test datasets
-- Extracted only variables with `mean()` and `std()`
-- Used activity labels for readability
-- Cleaned variable names for clarity
-- Aggregated by subject and activity using `dplyr::summarise_all(mean)`
-
+## Tidy data principles
+- One variable per column, one observation (subject × activity) per row, one table per observational unit.
